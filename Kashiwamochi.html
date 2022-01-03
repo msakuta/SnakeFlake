@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>WebKashiwamochi</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<style>
+			body {
+				color: #000000;
+				font-family:Monospace;
+				font-size:15px;
+				text-align:center;
+
+				background-color: #f0f0f0;
+				margin: 0px;
+			}
+
+			#container{
+				position: relative;
+			}
+
+			#points{
+				font-size: 25px;
+			}
+
+			table{
+				background-color: #f7c0a0;
+				border: 3px solid #7f7f7f;
+				border-collapse: collapse;
+				/* Centering */
+				margin-left: auto;
+				margin-right: auto;
+			}
+			td{background-color: #ffe0d0}
+			th{background-color: #e0c0a0}
+			td, th{padding: 2px; border: 2px solid #7f7f7f}
+		</style>
+	</head>
+	<body>
+		<h1>WebKashiwamochi</h1>
+		Size:
+		<select id="sizeSelect">
+			<option>6</option>
+			<option selected>7</option>
+			<option>8</option>
+			<option>9</option>
+			<option>10</option>
+			<option>11</option>
+			<option>12</option>
+		</select>
+		<input type="button" onclick="generateBoard()" value="Start">
+		<hr>
+		<div id="container"></div>
+		<div id="points"></div>
+		<hr>
+		<div id="highScores"></div>
+		<hr>
+		<div>Source on <a href="https://github.com/msakuta/WebKashiwamochi">GitHub</a>.
+
+		<script src="main.js"></script>
+
+	</body>
+</html>
