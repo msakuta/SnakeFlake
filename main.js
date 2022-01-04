@@ -2,6 +2,77 @@ var container;
 var table;
 var size;
 var board;
+
+class Snake{
+    direction = 0;
+    headPos = [0, 0];
+    length = 2;
+    history = [];
+
+    move(){
+        if(this.history.length === 0 || this.history[0][0] !== this.headPos[0] || this.history[0][1] !== this.headPos[1])
+            this.history.unshift([...this.headPos]);
+        const delta = [[-1, 0], [0, -1], [1, 0], [0, 1]][this.direction];
+        [0, 1].forEach(i => this.headPos[i] = Math.min(Math.max(this.headPos[i] + delta[i], 0), size-1));
+        while(this.length < this.history.length){
+            this.history.pop();
+        }
+    }
+}
+
+function hasElem(array, elem){
+    for(const a of array){
+        if(a[0] === elem[0] && a[1] === elem[1]){
+            return true;
+        }
+    }
+    return false;
+}
+
+function moveCheck(){
+    let hasFood = false;
+    for(let r = 0; r < size; r++){
+        for(let c = 0; c < size; c++){
+            // if(board[r * size + c] === 0 || (board[r * size + c] & fallEffectBit) !== 0){
+                const inTail = hasElem(snake.history, [c, r]);
+                if(snake.headPos[0] === c && snake.headPos[1] === r){
+                    if(inTail){
+                        becomeGameover();
+                        return;
+                    }
+                    if(board[r * size + c] === 4){
+                        snake.length++;
+                        points++;
+                    }
+                    board[r * size + c] = 2;
+                }
+                else if(inTail)
+                    board[r * size + c] = 3;
+                else if(board[r * size + c] !== 4)
+                    board[r * size + c] = 0;
+                else
+                    hasFood = true;
+                // board[r * size + c] |= fallEffectBit;
+                // if(0 < r)
+                //     board[(r - 1) * size + c] = 0;
+                fallTime = fallMaxTime;
+            // }
+        }
+    }
+
+    if(!hasFood){
+        for(let tries = 0; tries < 1e3; tries++){
+            const [c, r] = [0, 1].map(() => Math.floor(Math.random() * size));
+            if(!board[r * size + c]){
+                board[r * size + c] = 4;
+                break;
+            }
+        }
+    }
+}
+
+let snake = new Snake;
+
 var cellElems;
 var selectedCell = null;
 var selectedCoords = null;
@@ -71,14 +142,14 @@ window.onload = function(){
     // Load from the local storage before updating the table
     if(typeof(Storage) !== "undefined"){
         try{
-            deserialize(localStorage.getItem("Kashiwamochi"));
+            deserialize(localStorage.getItem("SnakeFlake"));
         }
         catch(e){
             // If something got wrong about the storage, clear everything.
             // Doing so would guarantee the problem no longer persists, or we
             // would be caught in the same problem repeatedly.
             sizeHighScores = {};
-            localStorage.removeItem("Kashiwamochi");
+            localStorage.removeItem("SnakeFlake");
         }
         updateHighScores();
     }
@@ -86,7 +157,7 @@ window.onload = function(){
     generateBoard();
     window.setInterval(function(){
         run();
-    }, 50);
+    }, 200);
 }
 
 window.addEventListener('resize', updateGauges);
@@ -362,6 +433,8 @@ function selectCell(sel){
 function generateBoard(){
     var sizeStr = document.getElementById("sizeSelect").value;
     size = parseInt(sizeStr);
+    snake.headPos = [Math.floor(size / 2), Math.floor(size / 2)];
+    snake.length = 0;
     board = new Array(size * size);
 
     gameover = false;
@@ -373,8 +446,12 @@ function generateBoard(){
     subgauge = 1.;
 //			practiceMode = e.getButton() != e.BUTTON1;
 
-    for(var i = 0; i < size * size; i++)
-        board[i] = newblock();
+    const halfSize = Math.floor(size / 2);
+    for(var i = 0; i < size * size; i++){
+        const x = i % size;
+        const y = Math.floor(i / size);
+        board[i] = x === halfSize && y === halfSize ? 2 : 0;
+    }
 
     createElements();
 
@@ -383,23 +460,6 @@ function generateBoard(){
 
 function newblock(){
     return (Math.random() * 150) == 0 ? 1 : Math.floor(Math.random() * 5) + 2;
-}
-
-function fallCheck(){
-    if(eraseEffectTime == 0 && fallTime == 0 && rollTime == 0){
-        for(var r = size-1; 0 <= r; r--){
-            for(var c = 0; c < size; c++){
-                if(board[r * size + c] === 0 || (board[r * size + c] & fallEffectBit) !== 0){
-                    board[r * size + c] = 0 < r ? board[(r - 1) * size + c] : newblock();
-                    board[r * size + c] |= fallEffectBit;
-                    if(0 < r)
-                        board[(r - 1) * size + c] = 0;
-                    fallTime = fallMaxTime;
-                }
-            }
-        }
-    }
-
 }
 
 function check(){
@@ -557,7 +617,7 @@ function becomeGameover(){
             highScores.pop();
 
         if(typeof(Storage) !== "undefined"){
-            localStorage.setItem("Kashiwamochi", serialize());
+            localStorage.setItem("SnakeFlake", serialize());
         }
         updateHighScores();
     }
@@ -615,7 +675,8 @@ function serialize(){
 
 function run() {
     if(!gameover){
-        fallCheck();		// fall flag check precedes
+        snake.move();
+        moveCheck();
         check();
 
         var speed = fallTime !== 0 || eraseEffectTime !== 0 ? 0 : (level + 1) * (level % 6 == 5 ? 0.2 : 1) * 0.005;
@@ -666,3 +727,12 @@ function run() {
         updateElements();
     }
 }
+
+window.addEventListener("keydown", evt => {
+    switch(evt.key){
+        case "a": snake.direction = 0; break;
+        case "w": snake.direction = 1; break;
+        case "d": snake.direction = 2; break;
+        case "s": snake.direction = 3; break;
+    }
+});
