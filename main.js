@@ -108,10 +108,6 @@ var practiceMode = false;
 var sizeHighScores = {};
 var newscore = -1;
 
-var gaugeElem;
-var gaugeIntElem;
-var subGaugeElem;
-var subGaugeIntElem;
 var gameOverElem;
 
 var points = 0;             // score points
@@ -159,8 +155,6 @@ window.onload = function(){
         run();
     }, 200);
 }
-
-window.addEventListener('resize', updateGauges);
 
 function createElements(){
     cellElems = new Array(size * size);
@@ -309,30 +303,6 @@ function createElements(){
     var containerRect = container.getBoundingClientRect();
     var tableRect = table.getBoundingClientRect();
 
-    // Main gauge bar
-    gaugeElem = document.createElement('div');
-    gaugeElem.style.position = 'absolute';
-    gaugeElem.style.backgroundColor = '#00003f';
-    container.appendChild(gaugeElem);
-
-    gaugeIntElem = document.createElement('div');
-    gaugeIntElem.style.position = 'relative';
-    gaugeIntElem.style.backgroundColor = '#0000ff';
-    gaugeElem.appendChild(gaugeIntElem);
-
-    // Sub gauge bar
-    subGaugeElem = document.createElement('div');
-    subGaugeElem.style.position = 'absolute';
-    subGaugeElem.style.backgroundColor = '#003f3f';
-    container.appendChild(subGaugeElem);
-
-    subGaugeIntElem = document.createElement('div');
-    subGaugeIntElem.style.position = 'relative';
-    subGaugeIntElem.style.backgroundColor = '#00ffff';
-    subGaugeElem.appendChild(subGaugeIntElem);
-
-    updateGauges();
-
     // Game over text overlay
     gameOverElem = document.createElement('div');
     gameOverElem.innerHTML = 'GAME OVER';
@@ -351,26 +321,6 @@ function createElements(){
 
     debugText = document.createElement('div');
     container.appendChild(debugText);
-}
-
-// Respond to window size change
-function updateGauges(){
-    var tableRect = table.getBoundingClientRect();
-    var rect = gaugeElem.getBoundingClientRect();
-    gaugeElem.style.left = (tableRect.left - 50) + 'px';
-    gaugeElem.style.top = '0px';
-    gaugeElem.style.width = '20px';
-    gaugeElem.style.height = tableRect.height + 'px';
-    gaugeIntElem.style.top = (rect.height * (1. - maingauge)) + 'px';
-    gaugeIntElem.style.width = '20px';
-    gaugeIntElem.style.height = (rect.height * maingauge) + 'px';
-    subGaugeElem.style.left = (tableRect.left - 20) + 'px';
-    subGaugeElem.style.top = '0px';
-    subGaugeElem.style.width = '10px';
-    subGaugeElem.style.height = tableRect.height + 'px';
-    subGaugeIntElem.style.top = (rect.height * (1. - subgauge)) + 'px';
-    subGaugeIntElem.style.width = '10px';
-    subGaugeIntElem.style.height = (rect.height * subgauge) + 'px';
 }
 
 function updateElements(){
@@ -401,12 +351,6 @@ function updateElements(){
     var pointsElem = document.getElementById("points");
     if(pointsElem)
         pointsElem.innerHTML = 'Points: ' + points;
-
-    var rect = gaugeElem.getBoundingClientRect();
-    gaugeIntElem.style.top = (rect.height * (1. - maingauge)) + 'px';
-    gaugeIntElem.style.height = (rect.height * maingauge) + 'px';
-    subGaugeIntElem.style.top = (rect.height * (1. - subgauge)) + 'px';
-    subGaugeIntElem.style.height = (rect.height * subgauge) + 'px';
 }
 
 function selectCell(sel){
