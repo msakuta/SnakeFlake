@@ -674,10 +674,10 @@ function run() {
 
 window.addEventListener("keydown", evt => {
     switch(evt.key){
-        case "a": snake.direction = 0; break;
-        case "w": snake.direction = 1; break;
-        case "d": snake.direction = 2; break;
-        case "s": snake.direction = 3; break;
+        case "a": case "ArrowLeft": snake.direction = 0; evt.preventDefault(); break;
+        case "w": case "ArrowUp": snake.direction = 1; evt.preventDefault(); break;
+        case "d": case "ArrowRight":  snake.direction = 2; evt.preventDefault(); break;
+        case "s": case "ArrowDown": snake.direction = 3; evt.preventDefault(); break;
     }
 });
 
