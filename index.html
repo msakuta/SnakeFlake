@@ -34,6 +34,22 @@
 			td{background-color: #ffe0d0}
 			th{background-color: #e0c0a0}
 			td, th{padding: 2px; border: 2px solid #7f7f7f}
+
+			#arrows-outer{
+				position: relative;
+				border: solid 2px;
+				padding: 10px;
+				left: 50%;
+				width: 216px;
+				height: 216px;
+				margin-left: -108px;
+			}
+
+			#arrows{
+				position: relative;
+				width: 206px;
+				height: 206px;
+			}
 		</style>
 	</head>
 	<body>
@@ -51,6 +67,14 @@
 		<input type="button" onclick="generateBoard()" value="Start">
 		<hr>
 		<div id="container"></div>
+		<div id="arrows-outer">
+			<div id="arrows">
+				<img id="arrow-left" src="images/arrow-left.png" style="position: absolute; left: 0px; top: 72px; width: 72px; height: 72px;"></img>
+				<img id="arrow-up" src="images/arrow-up.png" style="position: absolute; left: 72px; top: 0px; width: 72px; height: 72px;"></img>
+				<img id="arrow-right" src="images/arrow-right.png" style="position: absolute; left: 144px; top: 72px; width: 72px; height: 72px;"></img>
+				<img id="arrow-down" src="images/arrow-down.png" style="position: absolute; left: 72px; top: 144px; width: 72px; height: 72px;"></img>
+			</div>
+		</div>
 		<div id="points"></div>
 		<hr>
 		<div id="highScores"></div>

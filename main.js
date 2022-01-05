@@ -736,3 +736,8 @@ window.addEventListener("keydown", evt => {
         case "s": snake.direction = 3; break;
     }
 });
+
+document.getElementById("arrow-left").addEventListener("click", () => snake.direction = 0);
+document.getElementById("arrow-right").addEventListener("click", () => snake.direction = 2);
+document.getElementById("arrow-up").addEventListener("click", () => snake.direction = 1);
+document.getElementById("arrow-down").addEventListener("click", () => snake.direction = 3);
