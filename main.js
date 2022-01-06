@@ -681,7 +681,7 @@ window.addEventListener("keydown", evt => {
     }
 });
 
-document.getElementById("arrow-left").addEventListener("click", () => snake.direction = 0);
-document.getElementById("arrow-right").addEventListener("click", () => snake.direction = 2);
-document.getElementById("arrow-up").addEventListener("click", () => snake.direction = 1);
-document.getElementById("arrow-down").addEventListener("click", () => snake.direction = 3);
+document.getElementById("arrow-left").addEventListener("mousedown", () => snake.direction = 0);
+document.getElementById("arrow-right").addEventListener("mousedown", () => snake.direction = 2);
+document.getElementById("arrow-up").addEventListener("mousedown", () => snake.direction = 1);
+document.getElementById("arrow-down").addEventListener("mousedown", () => snake.direction = 3);
